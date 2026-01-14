@@ -1,0 +1,39 @@
+# ===== Customize here =====
+deepseek:
+  api_key: "PUT_YOUR_DEEPSEEK_KEY_HERE"
+  # Examples: https://api.deepseek.com or the endpoint your plan uses
+  base_url: "https://api.deepseek.com"
+  # Examples: "deepseek-chat" or "deepseek-reasoner" (depends on your account)
+  model: "deepseek-chat"
+  timeout_sec: 60
+
+project:
+  max_articles_per_site: 5
+  max_total_articles: 30
+  lookback_days: 14
+  cache_dir: ".cache"
+  output_dir: "output"
+  user_agent: "insight-radar/0.1 (+github)"
+
+websites:
+  - name: "Milken Institute"
+    url: "https://milkeninstitute.org/"
+    # optional hint: a page likely listing news/insights
+    news_index: "https://milkeninstitute.org/newsroom"
+
+# Optional: you can specify RSS feeds for better reliability
+rss_feeds:
+  - "https://milkeninstitute.org/rss.xml"
+
+market:
+  benchmark: "SPY"
+  history_days: 365
+  signals:
+    strong_move_1m: 0.08     # +8% 1 month
+    strong_drop_1m: -0.08    # -8% 1 month
+    z_threshold: 2.0         # last daily move > 2 stdev
+    drawdown_deep: -0.08     # -8% from 90d high
+
+output:
+  report_filename: "report.md"
+  save_raw_articles: true
