@@ -1,0 +1,14 @@
+You are given:
+- a theme summary
+- theme sentiment score (-1 to +1)
+- ETF pricing signals (returns, vol, z-score, drawdown)
+Explain whether the theme looks:
+- "possibly not priced in"
+- "partially priced in"
+- "likely priced in / crowded"
+- "negative priced in"
+- "mixed/unclear"
+
+Return strict JSON with keys:
+verdict: string
+reasoning_bullets: [string]
