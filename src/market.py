@@ -18,11 +18,27 @@ def yahoo_etf_signals(ticker: str, history_days: int = 365) -> Dict[str, Any]:
     if df is None or df.empty or "Close" not in df:
         return {"ticker": ticker, "error": "no data"}
 
-    close = df["Close"].dropna().values
-    if len(close) < 30:
-        return {"ticker": ticker, "error": "insufficient data"}
+    close = df["Close"].dropna()
 
+    # If yfinance returns a DataFrame (happens sometimes), squeeze it
+    if hasattr(close, "to_numpy"):
+        close = close.to_numpy()
+    
+    # Make sure it's 1D
+    close = np.asarray(close).squeeze()
+    
+    # If it's still not 1D, flatten as last resort
+    if close.ndim != 1:
+        close = close.reshape(-1)
+    
+    # Remove any non-finite values
+    close = close[np.isfinite(close)]
+    
+    if close.size < 30:
+        return {"ticker": ticker, "error": "insufficient data"}
+    
     ret = np.diff(close) / close[:-1]
+
 
     r1 = _window_return(close, 1)
     r5 = _window_return(close, 5)
