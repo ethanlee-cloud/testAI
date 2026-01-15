@@ -1,41 +1,90 @@
-# ===== Customize here =====
 deepseek:
-  api_key: "PUT_YOUR_DEEPSEEK_KEY_HERE"
-  # Examples: https://api.deepseek.com or the endpoint your plan uses
-  base_url: "https://api.deepseek.com"
-  # Examples: "deepseek-chat" or "deepseek-reasoner" (depends on your account)
-  model: "deepseek-chat"
+  # Use env var (Codespaces secret or local env)
+  api_key: "${NVIDIA_API_KEY}"
+  base_url: "https://integrate.api.nvidia.com/v1"
+  model: "meta/llama-3.1-8b-instruct"
   timeout_sec: 60
 
 project:
-  max_articles_per_site: 5
-  max_total_articles: 30
-  lookback_days: 14
+  # SPEED + LIMITS
+  max_articles_per_site: 2
+  max_total_articles: 12      # 6 sites × 2 articles
+  lookback_days: 14           # not older than 2 weeks
   cache_dir: ".cache"
   output_dir: "output"
-  user_agent: "insight-radar/0.1 (+github)"
+  user_agent: "insight-radar/0.1"
+  llm_enabled: true
 
+# === WEBSITES ===
 websites:
-  - name: "Milken Institute"
-    url: "https://milkeninstitute.org/"
-    news_index: "https://milkeninstitute.org"
+  - name: "Morgan Stanley Insights"
+    url: "https://www.morganstanley.com/insights"
+    news_index: "https://www.morganstanley.com/insights"
 
-  - name: "World Economic Forum"
+  - name: "Goldman Sachs Insights"
+    url: "https://www.goldmansachs.com/insights"
+    news_index: "https://www.goldmansachs.com/insights"
+
+  - name: "Blackstone Insights"
+    url: "https://www.blackstone.com/insights/"
+    news_index: "https://www.blackstone.com/insights/"
+
+  - name: "BlackRock Insights"
+    url: "https://www.blackrock.com/us/individual/insights"
+    news_index: "https://www.blackrock.com/us/individual/insights"
+
+  - name: "Oaktree Capital Insights"
     url: "https://www.oaktreecapital.com/insights"
     news_index: "https://www.oaktreecapital.com/insights"
 
-# Optional: you can specify RSS feeds for better reliability
+  - name: "Milken Institute"
+    url: "https://milkeninstitute.org/"
+    news_index: "https://milkeninstitute.org/about/newsroom"
+
+# === OPTIONAL RSS (FASTER IF AVAILABLE) ===
 rss_feeds:
-  - "https://milkeninstitute.org/rss.xml"
+  - "https://www.blackstone.com/insights/feed/"
+
+# === INVESTMENT-ONLY FILTER ===
+filters:
+  include_keywords:
+    - investment
+    - investing
+    - markets
+    - market
+    - portfolio
+    - strategy
+    - asset
+    - allocation
+    - equities
+    - bonds
+    - credit
+    - rates
+    - macro
+    - economy
+    - outlook
+    - research
+    - capital
+
+  exclude_keywords:
+    - careers
+    - culture
+    - diversity
+    - philanthropy
+    - leadership
+    - podcast
+    - video
+    - brand
+    - people
 
 market:
   benchmark: "SPY"
   history_days: 365
   signals:
-    strong_move_1m: 0.08     # +8% 1 month
-    strong_drop_1m: -0.08    # -8% 1 month
-    z_threshold: 2.0         # last daily move > 2 stdev
-    drawdown_deep: -0.08     # -8% from 90d high
+    strong_move_1m: 0.08
+    strong_drop_1m: -0.08
+    z_threshold: 2.0
+    drawdown_deep: -0.08
 
 output:
   report_filename: "report.md"
